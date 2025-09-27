@@ -295,12 +295,13 @@ footer p { margin: 5px 0; }
   .product img { height: 100px; }
 }
 @media (max-width: 600px) {
-  header { flex-direction: column; gap: 10px; }
-  header .logo { height: 70px; }
-  header .site-title { font-size: 24px; text-align: center; }
-  .products { gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .product { width: 25%; }
-  .product img { height: 80px; }
-  .prev, .next { display: none; }
-  .footer-logo { position: static; display: block; margin: 0 auto 10px auto; }
+  header {
+    flex-direction: row;   /* garde le logo et le titre sur la même ligne */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  header .logo { height: 60px; }
+  header .site-title { font-size: 22px; }
 }
