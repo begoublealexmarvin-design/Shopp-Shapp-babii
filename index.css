@@ -299,7 +299,7 @@ footer p { margin: 5px 0; }
   header .logo { height: 70px; }
   header .site-title { font-size: 24px; text-align: center; }
   .products { gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .product { width: 45%; }
+  .product { width: 30%; }
   .product img { height: 80px; }
   .prev, .next { display: none; }
   .footer-logo { position: static; display: block; margin: 0 auto 10px auto; }
