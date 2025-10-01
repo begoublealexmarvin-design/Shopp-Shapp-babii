@@ -615,18 +615,36 @@
   </div>
 </div>
 
+<!-- ====== PANIER ====== -->
+<div class="cart-container">
+  <h2>🛒 Mon Panier</h2>
+  <ul id="cart-items"></ul>
+  <p id="cart-total">Total: 0 FCFA</p>
+
+  <!-- Ancien bouton remplacé par un formulaire -->
+  <form id="checkout-form" action="paiement.php" method="POST">
+    <h3>Informations client</h3>
+    <input type="text" name="nom" placeholder="Nom complet" required>
+    <input type="tel" name="telephone" placeholder="Téléphone" required>
+    <input type="hidden" name="panier" id="panier-input">
+    <input type="hidden" name="total" id="total-input">
+    <button type="submit" id="checkout-btn">Payer avec Wave ✅</button>
+  </form>
+
+  <button id="clear-cart-btn">Vider le panier 🗑️</button>
+</div>
 
   
     
     
-  <!-====== PANIER ====== -->
+  <!-----====== PANIER ====== 
   <div class="cart-container">
     <h2>🛒 Mon Panier</h2>
     <ul id="cart-items"></ul>
     <p id="cart-total">Total: 0 FCFA</p>
     <button id="checkout-btn">Procéder au paiement</button>
     <button id="clear-cart-btn">Vider le panier 🗑️</button>
-  </div>
+  </div> --->
 
   <!-- ====== FOOTER ====== -->
   <footer>
@@ -652,7 +670,7 @@
   <!-- ====== BOUTON RETOUR EN HAUT ====== -->
   <a href="#" class="back-to-top">⬆</a>
 
-  <!-- ====== SCRIPT ====== -->
+  <!-- ====== SCRIPT ====== -
   <script>
     let cart = [];
     const cartItems = document.getElementById("cart-items");
@@ -748,6 +766,110 @@ document.querySelectorAll(".add-to-cart").forEach(button => {
         productList.scrollBy({ left: 200, behavior: 'smooth' });
       }, 8000);
     });
-  </script>
+  </script>--->
+
+
+  <script>
+  
+let cart = [];
+const cartItems = document.getElementById("cart-items");
+const cartTotal = document.getElementById("cart-total");
+
+// Ajouter au panier
+document.querySelectorAll(".add-to-cart").forEach(button => {
+  button.addEventListener("click", () => {
+    const name = button.dataset.name;
+    const price = parseInt(button.dataset.price);
+
+    const parentProduct = button.closest(".product");
+    const sizeSelect = parentProduct.querySelector(".shoe-size");
+    const size = sizeSelect ? sizeSelect.value : null;
+
+    if (size) {
+      cart.push({ name: name + " (Pointure " + size + ")", price });
+    } else {
+      cart.push({ name, price });
+    }
+    renderCart();
+  });
+});
+
+// Affichage du panier
+function renderCart() {
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    total += item.price;
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${item.name} - ${item.price} FCFA</span>
+      <button class="remove-item" data-index="${index}">❌</button>
+    `;
+    cartItems.appendChild(li);
+  });
+
+  cartTotal.textContent = "Total: " + total + " FCFA";
+
+  // Suppression article
+  document.querySelectorAll(".remove-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = btn.dataset.index;
+      cart.splice(index, 1);
+      renderCart();
+    });
+  });
+}
+
+// Paiement avec Wave
+document.getElementById("checkout-form").addEventListener("submit", (e) => {
+  if (cart.length === 0) {
+    e.preventDefault();
+    alert("⚠️ Votre panier est vide !");
+    return;
+  }
+
+  // Remplir les champs cachés avant envoi
+  document.getElementById("panier-input").value = JSON.stringify(cart);
+  document.getElementById("total-input").value = cart.reduce((sum, item) => sum + item.price, 0);
+});
+
+// Vider le panier
+document.getElementById("clear-cart-btn").addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Votre panier est déjà vide !");
+    return;
+  }
+  if (confirm("Voulez-vous vraiment vider tout le panier ?")) {
+    cart = [];
+    renderCart();
+  }
+});
+
+// Slider auto
+document.querySelectorAll('.product-slider').forEach(slider => {
+  const prevBtn = slider.querySelector('.prev');
+  const nextBtn = slider.querySelector('.next');
+  const productList = slider.querySelector('.products');
+
+  nextBtn.addEventListener('click', () => {
+    productList.scrollBy({ left: 200, behavior: 'smooth' });
+  });
+
+  prevBtn.addEventListener('click', () => {
+    productList.scrollBy({ left: -200, behavior: 'smooth' });
+  });
+
+  setInterval(() => {
+    productList.scrollBy({ left: 200, behavior: 'smooth' });
+  }, 8000);
+});
+
+
+
+
+</script>
+
 </body>
 </html>
