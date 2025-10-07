@@ -1,17 +1,13 @@
 <?php
-// Vérifie si le formulaire a bien été soumis
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sécurisation des données reçues
     $nom = htmlspecialchars($_POST['nom']);
     $telephone = htmlspecialchars($_POST['telephone']);
-    $panier = $_POST['panier']; // JSON
+    $panier = $_POST['panier'];
     $total = htmlspecialchars($_POST['total']);
-
-    // Convertir le panier JSON en tableau PHP
     $panierArray = json_decode($panier, true);
 
-    // === 1️⃣ ENVOI D'UN MAIL DE NOTIFICATION ===
-    $to = "tonemail@example.com"; // 👉 Remplace par ton adresse email
+    // === MAIL DE NOTIFICATION ===
+    $to = "tonemail@example.com"; // ✅ Mets ton adresse email ici
     $subject = "🛍️ Nouvelle commande Shop-Shap Babi";
     
     $message = "Une nouvelle commande vient d'être passée :\n\n";
@@ -24,15 +20,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $headers = "From: Shop-Shap Babi <no-reply@shopshap.com>\r\n";
-
-    // Envoi du mail
     mail($to, $subject, $message, $headers);
 
-    // === 2️⃣ SAUVEGARDE EN FICHIER LOCAL (optionnel) ===
+    // === SAUVEGARDE EN FICHIER ===
     $data = date("d/m/Y H:i:s") . " | Nom: $nom | Tel: $telephone | Total: $total | Panier: $panier\n";
     file_put_contents("commandes.txt", $data, FILE_APPEND);
 
-    // === 3️⃣ REDIRECTION VERS LA PAGE DE CONFIRMATION ===
+    // === ENVOI D'UNE NOTIFICATION WHATSAPP ===
+    $numero = "2250102030405"; // ✅ Ton numéro WhatsApp (format international, sans +)
+    $apiKey = "1234567"; // ✅ Mets ta clé CallMeBot ici
+
+    $whatsappMessage = "🛍️ Nouvelle commande Shop-Shap Babi !%0A"
+        . "👤 $nom%0A"
+        . "📞 $telephone%0A"
+        . "💰 $total FCFA";
+
+    $url = "https://api.callmebot.com/whatsapp.php?phone=$numero&text=$whatsappMessage&apikey=$apiKey";
+
+    // Appel API
+    $response = file_get_contents($url);
+
+    // Redirection
     header("Location: confirmation.html");
     exit();
 } else {
