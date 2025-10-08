@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $panierArray = json_decode($panier, true);
 
     // === MAIL DE NOTIFICATION ===
-    $to = "tonemail@example.com"; // ✅ Mets ton adresse email ici
+    $to = "begoublealexmarvin@gmail.com"; // ✅ Mets ton adresse email ici
     $subject = "🛍️ Nouvelle commande Shop-Shap Babi";
     
     $message = "Une nouvelle commande vient d'être passée :\n\n";
@@ -27,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     file_put_contents("commandes.txt", $data, FILE_APPEND);
 
     // === ENVOI D'UNE NOTIFICATION WHATSAPP ===
-    $numero = "2250102030405"; // ✅ Ton numéro WhatsApp (format international, sans +)
-    $apiKey = "1234567"; // ✅ Mets ta clé CallMeBot ici
+    $numero = ""; // ✅ Ton numéro WhatsApp (format international, sans +)
+    $apiKey = ""; // ✅ Mets ta clé CallMeBot ici
 
     $whatsappMessage = "🛍️ Nouvelle commande Shop-Shap Babi !%0A"
         . "👤 $nom%0A"
